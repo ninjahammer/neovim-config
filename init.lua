@@ -215,6 +215,9 @@ require('lazy').setup({
     },
     build = ':TSUpdate',
   },
+  {
+    'https://github.com/f-person/git-blame.nvim',
+  },
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
@@ -236,7 +239,6 @@ require('lazy').setup({
 
 -- Set highlight on search
 vim.o.hlsearch = false
-
 -- Make line numbers default
 vim.wo.number = true
 vim.wo.relativenumber = true
@@ -282,6 +284,8 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 vim.api.nvim_set_keymap('n', 'gt', ':Neotree<CR>', { noremap = true, silent = true })
+
+vim.api.nvim_set_keymap('n', 'gb', ':GitBlameToggle<CR>', { noremap = true, silent = true })
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
