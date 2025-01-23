@@ -152,12 +152,9 @@ require('lazy').setup({
   },
 
   {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
+    "catppuccin/nvim",
+    name = "catppuccin",
     priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'onedark'
-    end,
   },
   {
     "nvim-neo-tree/neo-tree.nvim",
@@ -176,7 +173,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
+        theme = 'catppuccin',
         component_separators = '|',
         section_separators = '',
       },
@@ -299,8 +296,10 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 vim.api.nvim_set_keymap('n', 'gt', ':Neotree<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<Esc>', ':noh<CR>')
 
 vim.api.nvim_set_keymap('n', 'gb', ':GitBlameToggle<CR>', { noremap = true, silent = true })
+vim.keymap.set('i', 'jk', '<Esc>')
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
@@ -322,12 +321,30 @@ require('telescope').setup {
         ['<C-d>'] = false,
       },
     },
+    sorting_strategy = "ascending",
+    layout_config = {
+      horizontal = {
+        prompt_position = "top",
+        preview_width = 0.55,
+      },
+      width = 0.87,
+      height = 0.80,
+    },
   },
 }
-require('onedark').setup {
-  style = 'deep'
+require('catppuccin').setup {
+  flavor = "mocha",
+  color_overrides = {
+    all = {
+      text = "#ffffff",
+    },
+    mocha = {
+      base = "#000000",
+      mantle = "#000000",
+      crust = "#000000",
+    },
+  },
 }
-require('onedark').load()
 require('neo-tree').setup({
   close_if_last_window = true
 })
@@ -423,19 +440,19 @@ harpoon:setup({})
 -- basic telescope configuration
 local conf = require("telescope.config").values
 local function toggle_telescope(harpoon_files)
-    local file_paths = {}
-    for _, item in ipairs(harpoon_files.items) do
-        table.insert(file_paths, item.value)
-    end
+  local file_paths = {}
+  for _, item in ipairs(harpoon_files.items) do
+    table.insert(file_paths, item.value)
+  end
 
-    require("telescope.pickers").new({}, {
-        prompt_title = "Harpoon",
-        finder = require("telescope.finders").new_table({
-            results = file_paths,
-        }),
-        previewer = conf.file_previewer({}),
-        sorter = conf.generic_sorter({}),
-    }):find()
+  require("telescope.pickers").new({}, {
+    prompt_title = "Harpoon",
+    finder = require("telescope.finders").new_table({
+      results = file_paths,
+    }),
+    previewer = conf.file_previewer({}),
+    sorter = conf.generic_sorter({}),
+  }):find()
 end
 
 vim.keymap.set("n", "<leader>ha", function() harpoon:list():add() end)
@@ -449,7 +466,7 @@ vim.keymap.set("n", "<C-f>", function() harpoon:list():select(4) end)
 vim.keymap.set("n", "<C-S-R>", function() harpoon:list():prev() end)
 vim.keymap.set("n", "<C-S-E>", function() harpoon:list():next() end)
 vim.keymap.set("n", "<C-e>", function() toggle_telescope(harpoon:list()) end,
-    { desc = "Open harpoon window" })
+  { desc = "Open harpoon window" })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
